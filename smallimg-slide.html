@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>fe 13</title>
+        <style>
+            .done {
+                color: lightgray;
+                text-decoration: line-through;
+            }
+        </style>
+        <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
+        <script>
+            // ready 函数会在文档加载完成后才执行
+            $('document').ready(function(){
+            })
+        </script>
+        <style media="screen">
+
+            .vertical-center {
+                top: 50%;
+                position: relative;
+                transform: translateY(-50%);
+            }
+            .gua-slide {
+                width: 730px;
+                height: 454px;
+                overflow: hidden;
+            }
+            .gua-slide-images {
+                position: relative;
+                width: 100%;
+                height: 100%;
+            }
+            .gua-slide-button {
+                position: absolute;
+            }
+            .gua-slide-button-left {
+                left: 0;
+            }
+            .gua-slide-button-right {
+                right: 0;
+            }
+
+            .gua-slide-img {
+                display: none;
+            }
+            .gua-slide-active {
+                display:  block !important;
+            }
+
+            .gua-slide-indicators {
+                width: 730px;
+                position: relative;
+                /*background: rebeccapurple;*/
+                padding: 0 5px;
+                margin-top: 5px;
+                margin-left: 0px;
+                margin-right: 0px;
+                text-align: center;
+            }
+            .gua-small-img{
+                display: inline-block;
+                padding: 0;
+                margin: 0;
+                width: 30%;
+            }
+            .gua-slide-img {
+                display: inline-block;
+                color: white;
+                padding: 0 5px;
+            }
+
+            button{
+                /*background: red;*/
+                border: none;
+                color: white;
+
+            }
+            button:focus{
+                outline: none;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="gua-slide">
+            <div class="gua-slide-images" data-active="0" data-imgs='3'>
+                <img class='gua-slide-img gua-slide-active' src="1.jpg" alt="" />
+                <img class='gua-slide-img ' src="2.jpg" alt="" />
+                <img class='gua-slide-img' src="3.jpg" alt="" />
+                <button class='gua-slide-button gua-slide-button-left vertical-center' type="button"><</button>
+                <button class='gua-slide-button gua-slide-button-right vertical-center' type="button">></button>
+            </div>
+        </div>
+        <div class="gua-slide-indicators">
+            <img class='gua-small-img ' data-index='0' src="1.jpg" alt="" />
+            <img class='gua-small-img ' data-index='1' src="2.jpg" alt="" />
+            <img class='gua-small-img' data-index='2' src="3.jpg" alt="" />
+        </div>
+    </body>
+    <script>
+        var log = function() {
+            console.log.apply(console, arguments)
+        }
+        var play = function(offset) {
+            var activeIndex = $('.gua-slide-images').data('active')
+            var numberOfImgs = $('.gua-slide-images').data('imgs')
+            var i = (activeIndex + numberOfImgs + offset) % numberOfImgs
+            $('.gua-slide-images').data('active', i)
+            //
+            $('.gua-slide-active').fadeOut()
+            $('.gua-slide-active').removeClass('gua-slide-active')
+            //
+            var active = $($('.gua-slide-img')[i])
+            active.addClass('gua-slide-active')
+            log(active,'btn')
+
+            active.fadeIn()
+            // 改变指示器
+            $('.gua-slide-i').removeClass('gua-slide-i-active')
+            var activeIndicator = $($('.gua-slide-i')[i])
+            activeIndicator.addClass('gua-slide-i-active')
+        }
+        var playPrev = function() {
+            play(-1)
+        }
+        var playNext = function() {
+            play(1)
+        }
+        $('.gua-slide-button').on('click', function(event){
+            var button = $(event.target)
+            if (button.hasClass('gua-slide-button-left')) {
+                playPrev()
+            } else {
+                playNext()
+            }
+        })
+        var mouseChange = function(index) {
+            $('.gua-slide-active').fadeOut()
+            $('.gua-slide-active').removeClass('gua-slide-active')
+            //
+            var active = $($('.gua-slide-img')[index])
+            active.addClass('gua-slide-active')
+            active.fadeIn()
+        }
+        $('.gua-slide-indicators').on('mouseenter', '.gua-small-img', function(event) {
+            var id = $(this).data('index')
+            $('.gua-slide-images').data('active', id)
+            mouseChange(id)
+        })
+    </script>
+</html>
