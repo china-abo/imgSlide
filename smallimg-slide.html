@@ -26,6 +26,7 @@
                 width: 730px;
                 height: 454px;
                 overflow: hidden;
+                border: 5px solid #007e7e;
             }
             .gua-slide-images {
                 position: relative;
@@ -54,8 +55,9 @@
                 position: relative;
                 /*background: rebeccapurple;*/
                 padding: 0px;
-                margin-top: 5px;
                 text-align: center;
+                border: 5px solid #007e7e;
+
             }
             .gua-small-img{
                 display: inline-block;
@@ -73,12 +75,15 @@
                 /*background: red;*/
                 border: none;
                 color: white;
-
+                opacity: 0.6;
+                height: 30px;
             }
             button:focus{
                 outline: none;
             }
-
+            .btnNone{
+                display: none;
+            }
         </style>
     </head>
     <body>
@@ -87,8 +92,8 @@
                 <img class='gua-slide-img gua-slide-active' src="1.jpg" alt="" />
                 <img class='gua-slide-img ' src="2.jpg" alt="" />
                 <img class='gua-slide-img' src="3.jpg" alt="" />
-                <button class='gua-slide-button gua-slide-button-left vertical-center' type="button"><</button>
-                <button class='gua-slide-button gua-slide-button-right vertical-center' type="button">></button>
+                <button class='gua-slide-button gua-slide-button-left vertical-center btnNone ' type="button"><</button>
+                <button class='gua-slide-button gua-slide-button-right vertical-center btnNone' type="button">></button>
             </div>
         </div>
         <div class="gua-slide-indicators">
@@ -160,10 +165,13 @@
             $('.gua-slide-img').on('mouseenter', function() {
                 log('mouseenter 执行了')
                 clearInterval(at)
+                $('.gua-slide-button').removeClass('btnNone')
             })
             $('.gua-slide-img').on('mouseleave', function() {
                 log('auto 执行了')
                 auto()
+                $('.gua-slide-button').addClass('btnNone')
+
             })
         }
         stopSlide()
