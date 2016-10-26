@@ -27,10 +27,12 @@
                 height: 454px;
                 overflow: hidden;
             }
+            .gua-slide:hover .gua-slide-button{display: block;}
             .gua-slide-images {
                 position: relative;
                 width: 100%;
                 height: 100%;
+                z-index: 0;
             }
             .gua-slide-button {
                 position: absolute;
@@ -66,14 +68,16 @@
                 background: red;
             }
             button{
+                display: none;
                 /*background: red;*/
                 border: none;
                 color: white;
-
+                z-index: 100;
             }
             button:focus{
                 outline: none;
             }
+
 
         </style>
     </head>
@@ -153,7 +157,7 @@
             $('.gua-slide-i-active').removeClass('gua-slide-i-active')
             //添加
             $(img[index]).addClass('gua-slide-active')
-            log($(img[index]))
+            // log($(img[index]))
             $(indicators[index]).addClass('gua-slide-i-active')
 
         }
@@ -167,5 +171,28 @@
             $('.gua-slide-images').data('active', id)
             mouseChange(id)
         })
+
+        //自动轮播
+        var auto = function() {
+                        at = setInterval(function(){
+                                    playNext()
+                                },3000)
+                    }
+        auto()
+        //鼠标移入图片停止轮播,移除开始轮播
+        var stopSlide = function(){
+            $('.gua-slide-img').on('mouseenter', function() {
+                // log('mouseenter 执行了')
+                clearInterval(at)
+                // $('.gua-slide-button').removeClass('none')
+            })
+            $('.gua-slide-img').on('mouseleave', function() {
+                // log('auto 执行了')
+                auto()
+                // $('.gua-slide-button').addClass('none')
+
+            })
+        }
+        stopSlide()
     </script>
 </html>

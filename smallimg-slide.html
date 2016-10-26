@@ -10,11 +10,7 @@
             }
         </style>
         <script src="http://cdn.bootcss.com/jquery/3.1.1/jquery.js"></script>
-        <script>
-            // ready 函数会在文档加载完成后才执行
-            $('document').ready(function(){
-            })
-        </script>
+
         <style media="screen">
 
             .vertical-center {
@@ -23,10 +19,12 @@
                 transform: translateY(-50%);
             }
             .gua-slide {
+                margin-right: auto;
+                margin-left: auto;
                 width: 730px;
                 height: 454px;
                 overflow: hidden;
-                border: 5px solid #007e7e;
+                border: 5px solid black;
             }
             .gua-slide-images {
                 position: relative;
@@ -51,12 +49,15 @@
             }
 
             .gua-slide-indicators {
+                margin-right: auto;
+                margin-left: auto;
                 width: 730px;
                 position: relative;
                 /*background: rebeccapurple;*/
                 padding: 0px;
                 text-align: center;
-                border: 5px solid #007e7e;
+                border: 5px solid black;
+                background: lightgray;
 
             }
             .gua-small-img{
@@ -81,8 +82,8 @@
             button:focus{
                 outline: none;
             }
-            .btnNone{
-                display: none;
+            .none{
+                display: none ;
             }
         </style>
     </head>
@@ -92,8 +93,8 @@
                 <img class='gua-slide-img gua-slide-active' src="1.jpg" alt="" />
                 <img class='gua-slide-img ' src="2.jpg" alt="" />
                 <img class='gua-slide-img' src="3.jpg" alt="" />
-                <button class='gua-slide-button gua-slide-button-left vertical-center btnNone ' type="button"><</button>
-                <button class='gua-slide-button gua-slide-button-right vertical-center btnNone' type="button">></button>
+                <button class='gua-slide-button gua-slide-button-left vertical-center none' type="button"><</button>
+                <button class='gua-slide-button gua-slide-button-right vertical-center none' type="button">></button>
             </div>
         </div>
         <div class="gua-slide-indicators">
@@ -103,77 +104,91 @@
         </div>
     </body>
     <script>
-        var log = function() {
-            console.log.apply(console, arguments)
-        }
-        var play = function(offset) {
-            var activeIndex = $('.gua-slide-images').data('active')
-            var numberOfImgs = $('.gua-slide-images').data('imgs')
-            var i = (activeIndex + numberOfImgs + offset) % numberOfImgs
-            $('.gua-slide-images').data('active', i)
-            //
-            $('.gua-slide-active').fadeOut()
-            $('.gua-slide-active').removeClass('gua-slide-active')
-            //
-            var active = $($('.gua-slide-img')[i])
-            active.addClass('gua-slide-active')
-            // log(active,'btn')
+    var log = function() {
+        console.log.apply(console, arguments)
+    }
+    var play = function(offset) {
+        var activeIndex = $('.gua-slide-images').data('active')
+        var numberOfImgs = $('.gua-slide-images').data('imgs')
+        var i = (activeIndex + numberOfImgs + offset) % numberOfImgs
+        $('.gua-slide-images').data('active', i)
+        //
+        $('.gua-slide-active').fadeOut()
+        $('.gua-slide-active').removeClass('gua-slide-active')
+        //
+        var active = $($('.gua-slide-img')[i])
+        active.addClass('gua-slide-active')
+        // log(active,'btn')
 
-            active.fadeIn()
-            // 改变指示器
-            $('.gua-slide-i').removeClass('gua-slide-i-active')
-            var activeIndicator = $($('.gua-slide-i')[i])
-            activeIndicator.addClass('gua-slide-i-active')
+        active.fadeIn()
+        // 改变指示器
+        $('.gua-slide-i').removeClass('gua-slide-i-active')
+        var activeIndicator = $($('.gua-slide-i')[i])
+        activeIndicator.addClass('gua-slide-i-active')
+    }
+    var playPrev = function() {
+        play(-1)
+    }
+    var playNext = function() {
+        play(1)
+    }
+    log('btn click start')
+    // $('.gua-slide-button').on('click', function(event){
+    //     var button = $(event.target)
+    //     log('button','click')
+    //     if (button.hasClass('gua-slide-button-left')) {
+    //         playPrev()
+    //     } else {
+    //         playNext()
+    //     }
+    // })
+    $('.gua-slide-button').on('click', function(event){
+        var button = $(event.target)
+        if (button.hasClass('gua-slide-button-left')) {
+            playPrev()
+        } else {
+            playNext()
         }
-        var playPrev = function() {
-            play(-1)
-        }
-        var playNext = function() {
-            play(1)
-        }
-        $('.gua-slide-button').on('click', function(event){
-            var button = $(event.target)
-            if (button.hasClass('gua-slide-button-left')) {
-                playPrev()
-            } else {
-                playNext()
-            }
-        })
-        var mouseChange = function(index) {
-            $('.gua-slide-active').fadeOut()
-            $('.gua-slide-active').removeClass('gua-slide-active')
-            //
-            var active = $($('.gua-slide-img')[index])
-            active.addClass('gua-slide-active')
-            active.fadeIn()
-        }
-        //鼠标移入缩略图进入大图
-        $('.gua-slide-indicators').on('mouseenter', '.gua-small-img', function(event) {
-            var id = $(this).data('index')
-            $('.gua-slide-images').data('active', id)
-            mouseChange(id)
-        })
-        //自动轮播
-        var auto = function() {
-                        at = setInterval(function(){
-                                    playNext()
-                                },3000)
-                    }
-        auto()
-        //鼠标移入图片停止轮播,移除开始轮播
-        var stopSlide = function(){
-            $('.gua-slide-img').on('mouseenter', function() {
-                log('mouseenter 执行了')
-                clearInterval(at)
-                $('.gua-slide-button').removeClass('btnNone')
-            })
-            $('.gua-slide-img').on('mouseleave', function() {
-                log('auto 执行了')
-                auto()
-                $('.gua-slide-button').addClass('btnNone')
+    })
+    log('btn click end')
+    var mouseChange = function(index) {
+        $('.gua-slide-active').fadeOut()
+        $('.gua-slide-active').removeClass('gua-slide-active')
+        //
+        var active = $($('.gua-slide-img')[index])
+        active.addClass('gua-slide-active')
+        active.fadeIn()
+    }
+    //鼠标移入缩略图进入大图
+    $('.gua-slide-indicators').on('mouseenter', '.gua-small-img', function(event) {
+        var id = $(this).data('index')
+        $('.gua-slide-images').data('active', id)
+        mouseChange(id)
+    })
+    //自动轮播
+    var auto = function() {
+                    at = setInterval(function(){
+                                playNext()
+                            },3000)
+                }
+    auto()
+    //鼠标移入图片停止轮播,移除开始轮播
+    var stopSlide = function(){
+        $('.gua-slide').on('mouseenter', function() {
+            // log('mouseenter 执行了')
+            clearInterval(at)
+            //添加点击按钮
+            $('.none').removeClass('none')
 
-            })
-        }
-        stopSlide()
-    </script>
+        })
+        $('.gua-slide').on('mouseleave', function() {
+            // log('auto 执行了')
+            auto()
+            //移除点击按钮
+            $('.gua-slide-button').addClass('none')
+
+        })
+    }
+    stopSlide()
+</script>
 </html>
